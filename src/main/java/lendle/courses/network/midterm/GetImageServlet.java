@@ -49,14 +49,20 @@ public class GetImageServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String id=request.getParameter("id");
-        if ((String) session.getAttribute(id) != null) {
-            try (OutputStream output = response.getOutputStream(); InputStream input = new URL((String) session.getAttribute(id)).openStream()) {
+        String url;
+        if (!((String) session.getAttribute(id)).equals("")) {
+            url=(String) session.getAttribute(id);
+            /*try (OutputStream output = response.getOutputStream(); InputStream input = new URL((String) session.getAttribute(id)).openStream()) {
                 IOUtils.copy(input, output);
-            }
+            }*/
         } else {
-            try (OutputStream output = response.getOutputStream(); InputStream input = new URL(defaultImageString).openStream()) {
+            url=defaultImageString;
+            /*try (OutputStream output = response.getOutputStream(); InputStream input = new URL(defaultImageString).openStream()) {
                 IOUtils.copy(input, output);
-            }
+            }*/
+        }
+        try (OutputStream output = response.getOutputStream(); InputStream input = new URL(url).openStream()) {
+                IOUtils.copy(input, output);
         }
 
     }
